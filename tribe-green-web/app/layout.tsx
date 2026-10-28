@@ -3,7 +3,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+  ),
   title: "Tribe Green | Thoughtful Corporate Gifting",
   description:
     "Discover thoughtful corporate gifts, employee welcome kits, festive hampers and branded merchandise for every occasion.",
@@ -15,6 +19,7 @@ export const metadata: Metadata = {
     type: "website",
   },
 };
+
 
 export default function RootLayout({
   children,

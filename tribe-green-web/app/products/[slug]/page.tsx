@@ -8,6 +8,7 @@ import {
   getProductBySlug,
   type Product,
 } from "../../../lib/products";
+import { connection } from "next/server";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -18,50 +19,28 @@ function formatPrice(amount: number) {
 }
 
 export async function generateStaticParams() {
-  try {
-    const products = await getProducts();
+  const products = await getProducts();
 
-    return products.map((product) => ({
-      slug: product.slug,
-    }));
-  } catch (error) {
-    console.error("Could not load products for static params:", error);
-    return [];
-  }
+  return products.map((product) => ({
+    slug: product.slug,
+  }));
 }
-
 export async function generateMetadata({
   params,
-}: Props): Promise<Metadata> {
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
 
-  try {
-    const product = await getProductBySlug(slug);
+  const productName = slug
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 
-    if (!product) {
-      return {
-        title: "Product Not Found | Tribe Green",
-      };
-    }
-
-    return {
-      title: `${product.name} | Tribe Green Corporate Gifting`,
-      description: product.description,
-      openGraph: {
-        title: `${product.name} | Tribe Green`,
-        description: product.description,
-        images: [product.image],
-      },
-    };
-  } catch (error) {
-    console.error("Could not load product metadata:", error);
-
-    return {
-      title: "Product Details | Tribe Green",
-      description:
-        "Explore corporate gifting products from Tribe Green.",
-    };
-  }
+  return {
+    title: `${productName} | Tribe Green`,
+    description: `Explore ${productName} from Tribe Green's corporate gifting collection. Enquire about bulk orders and customisation.`,
+  };
 }
 
 export default function ProductDetailPage({ params }: Props) {
@@ -81,6 +60,7 @@ export default function ProductDetailPage({ params }: Props) {
 }
 
 async function ProductDetailContent({ params }: Props) {
+    await connection();
   const { slug } = await params;
 
   let product: Product | null;
