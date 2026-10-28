@@ -18,6 +18,7 @@ function formatPrice(amount: number) {
   return `₹${amount.toLocaleString("en-IN")}`;
 }
 
+
 export async function generateStaticParams() {
   const products = await getProducts();
 
@@ -25,6 +26,7 @@ export async function generateStaticParams() {
     slug: product.slug,
   }));
 }
+
 export async function generateMetadata({
   params,
 }: {

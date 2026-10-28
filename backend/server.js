@@ -413,6 +413,7 @@ app.post("/api/admin/logout", (req, res) => {
 });
 
 
+
 const PORT = process.env.PORT || 5000;
 
 async function startServer() {
@@ -421,8 +422,8 @@ async function startServer() {
 
     console.log("Connected to MongoDB.");
 
-    app.listen(PORT, () => {
-      console.log(`Tribe Green API running at http://localhost:${PORT}`);
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Tribe Green API running on port ${PORT}`);
     });
   } catch (error) {
     console.error("Could not connect to MongoDB:", error.message);

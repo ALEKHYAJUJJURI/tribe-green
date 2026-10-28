@@ -22,7 +22,7 @@ async function handleSubmit(
 
   try {
     const apiBase =
-      process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      process.env.BACKEND_API_URL || "http://localhost:5000";
 
     const response = await fetch(`${apiBase}/api/admin/login`, {
       method: "POST",
