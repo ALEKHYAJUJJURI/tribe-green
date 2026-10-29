@@ -13,9 +13,36 @@ const authenticateAdmin = require("./middleware/auth");
 
 const app = express();
 
+let isConnected = false;
+
+async function connectDB() {
+  if (isConnected && mongoose.connection.readyState === 1) {
+    return;
+  }
+
+  await mongoose.connect(process.env.MONGODB_URI);
+  isConnected = true;
+
+  console.log("Connected to MongoDB.");
+}
+
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error("MongoDB connection failed:", error.message);
+
+    res.status(503).json({
+      success: false,
+      message: "Database connection unavailable.",
+    });
+  }
+});
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    origin: process.env.CLIENT_URL,
     credentials: true,
   })
 );
@@ -194,9 +221,7 @@ app.post("/api/enquiries", async (req, res) => {
   }
 });
 
-
 // Get all enquiries (temporary development route)
-
 app.get("/api/enquiries", authenticateAdmin, async (req, res) => {
   try {
     const enquiries = await Enquiry.find()
@@ -217,7 +242,6 @@ app.get("/api/enquiries", authenticateAdmin, async (req, res) => {
     });
   }
 });
-
 
 app.patch(
   "/api/enquiries/:id/status",
@@ -275,8 +299,6 @@ app.patch(
     }
   }
 );
-
-
 
 app.get(
   "/api/enquiries/export.csv",
@@ -363,7 +385,6 @@ app.get(
   }
 );
 
-
 app.post("/api/admin/login", (req, res) => {
   const { email, password } = req.body;
 
@@ -397,7 +418,6 @@ app.post("/api/admin/login", (req, res) => {
   });
 });
 
-
 app.post("/api/admin/logout", (req, res) => {
   res.clearCookie("adminToken", {
     httpOnly: true,
@@ -412,30 +432,4 @@ app.post("/api/admin/logout", (req, res) => {
   });
 });
 
-
-app.get("/", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "Tribe Green API is running.",
-  });
-});
-
-
-const PORT = process.env.PORT || 5000;
-
-async function startServer() {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI);
-
-    console.log("Connected to MongoDB.");
-
-    app.listen(PORT, "0.0.0.0", () => {
-      console.log(`Tribe Green API running on port ${PORT}`);
-    });
-  } catch (error) {
-    console.error("Could not connect to MongoDB:", error.message);
-    process.exit(1);
-  }
-}
-
-startServer();
+module.exports = app;

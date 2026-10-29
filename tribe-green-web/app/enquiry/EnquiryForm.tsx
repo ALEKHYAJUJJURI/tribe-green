@@ -145,7 +145,7 @@ const [submissionReference, setSubmissionReference] = useState("");
 
   try {
     const apiBase =
-      process.env.BACKEND_API_URL || "http://localhost:5000";
+      process.env.BACKEND_API_URL || "https://tribe-green-8iw2.vercel.app/";
 
     const response = await fetch(`${apiBase}/api/enquiries`, {
       method: "POST",

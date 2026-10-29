@@ -25,7 +25,7 @@ type Enquiry = {
 const STATUSES = ["New", "Contacted", "Converted", "Lost"] as const;
 
 const API_BASE =
-  process.env.BACKEND_API_URL || "http://localhost:5000";
+  process.env.BACKEND_API_URL || "https://tribe-green-8iw2.vercel.app/";
 
 export default function AdminDashboardPage() {
   const router = useRouter();
