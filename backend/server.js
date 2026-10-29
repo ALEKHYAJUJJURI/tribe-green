@@ -413,6 +413,13 @@ app.post("/api/admin/logout", (req, res) => {
 });
 
 
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Tribe Green API is running.",
+  });
+});
+
 
 const PORT = process.env.PORT || 5000;
 
