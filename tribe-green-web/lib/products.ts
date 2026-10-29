@@ -12,7 +12,7 @@ export type Product = {
 };
 
 const API_BASE =
-  process.env.BACKEND_API_URL || "http://localhost:5000";
+  process.env.BACKEND_API_URL ;
 
 export async function getProducts(): Promise<Product[]> {
   const response = await fetch(`${API_BASE}/api/products`, {
