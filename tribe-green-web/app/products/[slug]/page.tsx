@@ -2,47 +2,70 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { connection } from "next/server";
+
 import ProductLoadError from "./ProductLoadError";
 import {
   getProducts,
   getProductBySlug,
   type Product,
 } from "../../../lib/products";
-import { connection } from "next/server";
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
 
-function formatPrice(amount: number) {
+function formatPrice(amount: number): string {
   return `₹${amount.toLocaleString("en-IN")}`;
 }
 
+function formatProductName(slug: string): string {
+  return slug
+    .split("-")
+    .map(
+      (word) => word.charAt(0).toUpperCase() + word.slice(1)
+    )
+    .join(" ");
+}
 
+// Pre-render product routes for products returned by the API.
 export async function generateStaticParams() {
   try {
     const products = await getProducts();
-    return products.map((product) => ({ slug: product.slug }));
+
+    return products.map((product) => ({
+      slug: product.slug,
+    }));
   } catch (error) {
-    console.error("generateStaticParams failed:", error);
+    console.error("Could not generate product routes:", error);
     return [];
   }
 }
+
+// Dynamic title, description, and social-sharing metadata.
 export async function generateMetadata({
   params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
+}: Props): Promise<Metadata> {
   const { slug } = await params;
+  const productName = formatProductName(slug);
 
-  const productName = slug
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+  const title = `${productName} | Tribe Green`;
+  const description = `Explore ${productName} from Tribe Green's corporate gifting collection. Enquire about bulk orders and customisation.`;
 
   return {
-    title: `${productName} | Tribe Green`,
-    description: `Explore ${productName} from Tribe Green's corporate gifting collection. Enquire about bulk orders and customisation.`,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      images: [
+        {
+          url: "/images/tribe-green-share.jpg",
+          alt: "Tribe Green corporate gifting collection",
+        },
+      ],
+    },
   };
 }
 
@@ -63,7 +86,8 @@ export default function ProductDetailPage({ params }: Props) {
 }
 
 async function ProductDetailContent({ params }: Props) {
-    await connection();
+  await connection();
+
   const { slug } = await params;
 
   let product: Product | null;
@@ -85,6 +109,7 @@ async function ProductDetailContent({ params }: Props) {
 
   return (
     <main className="min-h-screen bg-[#faf9f4]">
+      {/* Header */}
       <header className="border-b border-[#e8e5db] bg-white">
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-8 lg:px-12">
           <Link
@@ -103,13 +128,21 @@ async function ProductDetailContent({ params }: Props) {
         </nav>
       </header>
 
+      {/* Product details */}
       <div className="mx-auto max-w-7xl px-5 py-8 sm:px-8 sm:py-12 lg:px-12">
-        <nav aria-label="Breadcrumb" className="mb-8 text-sm text-[#777b70]">
+        {/* Breadcrumb */}
+        <nav
+          aria-label="Breadcrumb"
+          className="mb-8 text-sm text-[#777b70]"
+        >
           <Link href="/" className="hover:text-[#244733]">
             Home
           </Link>
           {" / "}
-          <Link href="/#catalogue" className="hover:text-[#244733]">
+          <Link
+            href="/#catalogue"
+            className="hover:text-[#244733]"
+          >
             Collection
           </Link>
           {" / "}
@@ -117,6 +150,7 @@ async function ProductDetailContent({ params }: Props) {
         </nav>
 
         <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
+          {/* Product image */}
           <div className="overflow-hidden rounded-3xl bg-[#eeede4]">
             <img
               src={product.image}
@@ -125,12 +159,13 @@ async function ProductDetailContent({ params }: Props) {
             />
           </div>
 
+          {/* Product information */}
           <div className="py-2 sm:py-5">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#99834a]">
               {product.category}
             </p>
 
-            <h1 className="mt-4 text-3xl leading-tight font-medium tracking-tight text-[#244733] sm:text-5xl">
+            <h1 className="mt-4 text-3xl font-medium leading-tight tracking-tight text-[#244733] sm:text-5xl">
               {product.name}
             </h1>
 
@@ -138,52 +173,60 @@ async function ProductDetailContent({ params }: Props) {
               {product.description}
             </p>
 
+            {/* Price */}
             <div className="mt-7 border-y border-[#e0e1d6] py-5">
               <p className="text-xs font-semibold uppercase tracking-wider text-[#85897e]">
                 Estimated price per unit
               </p>
+
               <p className="mt-2 text-2xl font-semibold text-[#244733]">
                 {formatPrice(product.minPrice)} –{" "}
                 {formatPrice(product.maxPrice)}
               </p>
+
               <p className="mt-2 text-xs leading-5 text-[#85897e]">
-                Indicative pricing for this demonstration. Final pricing
-                depends on quantity and customisation.
+                Indicative pricing for this demonstration. Final
+                pricing depends on quantity and customisation.
               </p>
             </div>
 
+            {/* Suitable occasions */}
             <section className="mt-7">
               <h2 className="text-sm font-semibold text-[#244733]">
                 Perfect for
               </h2>
+
               <div className="mt-3 flex flex-wrap gap-2">
-                {product.occasions.map((item) => (
+                {product.occasions.map((occasion) => (
                   <span
-                    key={item}
+                    key={occasion}
                     className="rounded-full border border-[#dce1d5] bg-white px-3 py-2 text-xs text-[#53624f]"
                   >
-                    {item}
+                    {occasion}
                   </span>
                 ))}
               </div>
             </section>
 
+            {/* Customisation options */}
             <section className="mt-7">
               <h2 className="text-sm font-semibold text-[#244733]">
                 Make it yours
               </h2>
+
               <div className="mt-3 flex flex-wrap gap-2">
-                {product.customisation.map((item) => (
+                {product.customisation.map((option) => (
                   <span
-                    key={item}
+                    key={option}
                     className="rounded-full bg-[#e8eddf] px-3 py-2 text-xs text-[#355e43]"
                   >
-                    ✓ {item}
+                    ✓ {option}
                   </span>
                 ))}
               </div>
             </section>
 
+            {/* Actions */}
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
                 href={`/enquiry?product=${product.slug}`}
@@ -203,8 +246,8 @@ async function ProductDetailContent({ params }: Props) {
             </div>
 
             <p className="mt-4 text-center text-xs leading-5 text-[#85897e]">
-              Looking for bulk quantities? Tell us about your event and delivery
-              requirements.
+              Looking for bulk quantities? Tell us about your event
+              and delivery requirements.
             </p>
           </div>
         </div>
