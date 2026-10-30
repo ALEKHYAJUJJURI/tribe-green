@@ -31,7 +31,7 @@ export default function ProductDetailsPage() {
         setProduct(null);
 
         const response = await getProductBySlug(slug);
-
+console.log("response of product details page",response.data)
         if (!response.success) {
           throw new Error("Unable to load this product.");
         }

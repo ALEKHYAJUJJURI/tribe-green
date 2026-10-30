@@ -128,6 +128,7 @@ export default function HomePage() {
         setError("");
 
         const response = await getProducts();
+        console.log("response of products in the homepage",response.data)
 
         if (!response.success) {
           throw new Error("Unable to load products.");
