@@ -6,9 +6,9 @@ export default function ThankYouPage() {
       <h1 className="text-3xl font-bold text-green-800">
         Thank you for your enquiry!
       </h1>
-      <p className="mt-3 text-gray-600">
+      {/* <p className="mt-3 text-gray-600">
         Your enquiry confirmation page will be completed when we integrate the API.
-      </p>
+      </p> */}
       <Link to="/" className="mt-6 rounded-lg bg-green-800 px-5 py-3 text-white">
         Back to Home
       </Link>

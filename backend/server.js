@@ -11,8 +11,36 @@ const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const authenticateAdmin = require("./middleware/auth");
 
-const app = express();
 
+
+
+
+const app = express();
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://tribe-green-w8cf.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      const normalizedOrigin = origin?.replace(/\/+$/, "");
+
+      if (!origin || allowedOrigins.includes(normalizedOrigin)) {
+        callback(null, true);
+      } else {
+        console.error("Blocked CORS origin:", origin);
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
+app.use(express.json());
+app.use(cookieParser());
+
+// Database connection
 let isConnected = false;
 
 async function connectDB() {
@@ -39,27 +67,6 @@ app.use(async (req, res, next) => {
     });
   }
 });
-
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://tribe-green-w8cf.vercel.app",
-];
-
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
-
-app.use(express.json());
-app.use(cookieParser());
 
 // Basic health check
 app.get("/api/health", (req, res) => {

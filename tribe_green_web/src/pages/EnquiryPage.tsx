@@ -166,6 +166,7 @@ export default function EnquiryPage() {
         message: message.trim(),
         source: "website",
       });
+      console.log("enquiry success",response.success)
 
       if (response.success) {
         navigate("/thank-you", {
