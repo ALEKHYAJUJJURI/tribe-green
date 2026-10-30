@@ -1,9 +1,10 @@
-const API_BASE_URL = import.meta.env.FRONTEND_API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_FRONTEND_API_BASE_URL;
 
 export async function apiRequest<T>(
   endpoint: string,
   options: RequestInit = {},
 ): Promise<T> {
+  console.log(`${API_BASE_URL}${endpoint}`)
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
     credentials: "include",

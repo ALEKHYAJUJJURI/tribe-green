@@ -40,9 +40,20 @@ app.use(async (req, res, next) => {
   }
 });
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://tribe-green-w8cf.vercel.app",
+];
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
@@ -433,3 +444,11 @@ app.post("/api/admin/logout", (req, res) => {
 });
 
 module.exports = app;
+
+if (require.main === module) {
+  const PORT = process.env.PORT || 5000;
+
+  app.listen(PORT, () => {
+    console.log(`Tribe Green API running at http://localhost:${PORT}`);
+  });
+}
