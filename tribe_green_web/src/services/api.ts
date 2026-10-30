@@ -1,5 +1,5 @@
 
-const API_BASE_URL = import.meta.env.FRONTEND_API_BASE_URL;
+const API_BASE_URL ="https://tribe-green-8iw2.vercel.app";
 
 export async function apiRequest<T>(
   endpoint: string,
@@ -9,7 +9,7 @@ export async function apiRequest<T>(
     throw new Error("Backend API URL is not configured.");
   }
 
-  const url = `${API_BASE_URL.replace(/\/$/, "")}${endpoint}`;
+  const url = `${API_BASE_URL}${endpoint}`;
 
   console.log("API Request:", url);
 

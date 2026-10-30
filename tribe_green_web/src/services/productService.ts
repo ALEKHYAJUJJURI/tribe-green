@@ -1,18 +1,15 @@
-
 import { apiRequest } from "./api";
-import type { Product } from "../types/product";
-
-interface ApiResponse<T> {
-  success: boolean;
-  data: T;
-}
+import type {
+  ProductResponse,
+  ProductsResponse,
+} from "../types/product";
 
 export function getProducts() {
-  return apiRequest<ApiResponse<Product[]>>("/api/products");
+  return apiRequest<ProductsResponse>("/api/products");
 }
 
 export function getProductBySlug(slug: string) {
-  return apiRequest<ApiResponse<Product>>(
-    `/api/products/${slug}`
+  return apiRequest<ProductResponse>(
+    `/api/products/${encodeURIComponent(slug)}`,
   );
 }
