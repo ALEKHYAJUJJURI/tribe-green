@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminLayout from "../../components/admin/AdminLayout";
 import {
-  AdminAuthError,
+ 
   ENQUIRY_STATUSES,
   adminLogout,
   downloadEnquiriesCsv,
@@ -12,7 +12,7 @@ import {
   type EnquiryStatus,
 } from "../../services/adminService";
 import { getProducts } from "../../services/productService";
-// import { getProducts } from "../services/productService";
+
 
 const statusStyles: Record<EnquiryStatus, string> = {
   New: "border-[#E3C98F] bg-[#F3E9D2] text-[#8A6A2B]",
@@ -78,20 +78,7 @@ export default function AdminDashboardPage() {
   const [exporting, setExporting] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
 
-//   const handleError = useCallback(
-//     (err: unknown) => {
-//       if (err instanceof AdminAuthError) {
-//         navigate("/admin/login", { replace: true });
-//         return;
-//       }
-//       setError(
-//         err instanceof Error
-//           ? err.message
-//           : "Something went wrong. Please try again."
-//       );
-//     },
-//     [navigate]
-//   );
+
 
   const loadEnquiries = useCallback(async () => {
     try {
