@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getProductBySlug } from "../services/productService";
@@ -63,14 +62,16 @@ console.log("response of product details page",response.data)
 
   if (loading) {
     return (
-      <main className="mx-auto max-w-7xl px-5 py-20">
-        <div className="grid animate-pulse gap-10 md:grid-cols-2">
-          <div className="h-96 rounded-3xl bg-gray-100" />
-          <div className="space-y-5">
-            <div className="h-5 w-32 rounded bg-gray-100" />
-            <div className="h-10 w-3/4 rounded bg-gray-100" />
-            <div className="h-24 rounded bg-gray-100" />
-            <div className="h-12 rounded bg-gray-100" />
+      <main className="bg-[#FAF6EE]">
+        <div className="mx-auto max-w-7xl px-5 py-20">
+          <div className="grid animate-pulse gap-10 md:grid-cols-2">
+            <div className="h-96 rounded-3xl bg-[#EFE8D8]/70" />
+            <div className="space-y-5">
+              <div className="h-5 w-32 rounded bg-[#EFE8D8]/70" />
+              <div className="h-10 w-3/4 rounded bg-[#EFE8D8]/70" />
+              <div className="h-24 rounded bg-[#EFE8D8]/70" />
+              <div className="h-12 rounded bg-[#EFE8D8]/70" />
+            </div>
           </div>
         </div>
       </main>
@@ -79,18 +80,22 @@ console.log("response of product details page",response.data)
 
   if (error || !product) {
     return (
-      <main className="flex min-h-[60vh] flex-col items-center justify-center px-5 text-center">
-        <h1 className="text-2xl font-bold text-gray-900">
+      <main className="flex min-h-[60vh] flex-col items-center justify-center bg-[#FAF6EE] px-5 text-center">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-2xl text-red-600 shadow-sm">
+          !
+        </div>
+
+        <h1 className="mt-5 text-2xl font-extrabold text-stone-900">
           Product unavailable
         </h1>
 
-        <p className="mt-3 text-gray-600">
+        <p className="mt-3 max-w-md text-stone-600">
           {error || "We couldn't find this product."}
         </p>
 
         <Link
           to="/"
-          className="mt-6 rounded-full bg-green-800 px-6 py-3 font-semibold text-white hover:bg-green-900"
+          className="mt-6 rounded-full bg-[#14532D] px-7 py-3 font-semibold text-white transition hover:bg-[#0F3D22]"
         >
           Back to catalogue
         </Link>
@@ -109,19 +114,19 @@ console.log("response of product details page",response.data)
   const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
 
   return (
-    <main className="bg-white">
+    <main className="bg-[#FAF6EE]">
       <div className="mx-auto max-w-7xl px-5 py-8 lg:px-8">
-        <nav aria-label="Breadcrumb" className="text-sm text-gray-500">
-          <Link to="/" className="hover:text-green-800">
+        <nav aria-label="Breadcrumb" className="text-sm text-stone-500">
+          <Link to="/" className="font-medium hover:text-[#14532D]">
             Home
           </Link>
           <span className="mx-2">/</span>
-          <span className="text-gray-900">{product.name}</span>
+          <span className="font-medium text-stone-900">{product.name}</span>
         </nav>
 
         <section className="grid gap-10 py-8 md:grid-cols-2 md:gap-14 md:py-12">
           {/* Product image */}
-          <div className="overflow-hidden rounded-3xl bg-[#f3f6ef]">
+          <div className="self-start overflow-hidden rounded-[2rem] border border-[#EFE8D8] bg-white shadow-xl shadow-[#14532D]/10 md:sticky md:top-24">
             <img
               src={product.image}
               alt={product.name}
@@ -132,41 +137,43 @@ console.log("response of product details page",response.data)
 
           {/* Product information */}
           <div className="flex flex-col justify-center">
-            <p className="text-sm font-semibold uppercase tracking-widest text-green-800">
+            <span className="self-start rounded-full bg-[#F3E9D2] px-4 py-1.5 text-[11px] font-bold uppercase tracking-[2px] text-[#8A6A2B]">
               {product.category}
-            </p>
+            </span>
 
-            <h1 className="mt-3 text-3xl font-bold tracking-tight text-gray-950 sm:text-4xl">
+            <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-stone-950 sm:text-4xl">
               {product.name}
             </h1>
 
-            <p className="mt-5 text-base leading-7 text-gray-600">
+            <div className="mt-4 h-[3px] w-12 rounded-full bg-[#B8924A]" />
+
+            <p className="mt-5 text-base leading-7 text-stone-600">
               {product.description}
             </p>
 
-            <div className="mt-7 rounded-2xl bg-[#f3f6ef] p-5">
-              <p className="text-sm text-gray-600">Estimated price per unit</p>
+            <div className="mt-7 rounded-2xl border border-[#EFE8D8] bg-white p-5">
+              <p className="text-[11px] font-bold uppercase tracking-[2px] text-stone-500">
+                Estimated price per unit
+              </p>
 
-              <p className="mt-2 text-2xl font-bold text-gray-950">
+              <p className="mt-2 text-3xl font-extrabold text-[#14532D]">
                 {formatPrice(product.minPrice)} – {formatPrice(product.maxPrice)}
               </p>
 
-              <p className="mt-2 text-xs leading-5 text-gray-500">
+              <p className="mt-3 border-t border-[#F3EEE0] pt-3 text-xs leading-5 text-stone-500">
                 Final pricing may depend on order quantity and customisation.
                 Confirm the quotation with our sales team.
               </p>
             </div>
 
             <div className="mt-7">
-              <h2 className="font-semibold text-gray-900">
-                Suitable occasions
-              </h2>
+              <h2 className="font-bold text-stone-900">Suitable occasions</h2>
 
               <div className="mt-3 flex flex-wrap gap-2">
                 {product.occasions.map((item) => (
                   <span
                     key={item}
-                    className="rounded-full border border-gray-200 px-3 py-2 text-sm text-gray-700"
+                    className="rounded-full border border-[#D9E8DC] bg-[#F1F7F2] px-3.5 py-2 text-sm font-medium text-[#14532D]"
                   >
                     {item}
                   </span>
@@ -175,7 +182,7 @@ console.log("response of product details page",response.data)
             </div>
 
             <div className="mt-7">
-              <h2 className="font-semibold text-gray-900">
+              <h2 className="font-bold text-stone-900">
                 Customisation available
               </h2>
 
@@ -183,9 +190,10 @@ console.log("response of product details page",response.data)
                 {product.customisation.map((item) => (
                   <span
                     key={item}
-                    className="rounded-lg bg-green-50 px-3 py-2 text-sm text-green-800"
+                    className="rounded-lg border border-[#EFE8D8] bg-white px-3.5 py-2 text-sm font-medium text-stone-700"
                   >
-                    ✓ {item}
+                    <span className="mr-1.5 text-[#B8924A]">✓</span>
+                    {item}
                   </span>
                 ))}
               </div>
@@ -195,7 +203,7 @@ console.log("response of product details page",response.data)
               <Link
                 to="/enquiry"
                 state={{ selectedProduct: product.slug }}
-                className="flex flex-1 items-center justify-center rounded-full bg-green-800 px-6 py-3.5 text-center font-semibold text-white transition hover:bg-green-900"
+                className="flex flex-1 items-center justify-center rounded-full bg-[#14532D] px-6 py-4 text-center font-semibold text-white shadow-lg shadow-[#14532D]/20 transition hover:bg-[#0F3D22] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#14532D] focus-visible:ring-offset-2"
               >
                 Enquire About This Product
               </Link>
@@ -204,13 +212,13 @@ console.log("response of product details page",response.data)
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center rounded-full border border-green-800 px-6 py-3.5 font-semibold text-green-800 transition hover:bg-green-50"
+                className="flex items-center justify-center rounded-full border border-[#14532D] bg-white px-6 py-4 font-semibold text-[#14532D] transition hover:bg-[#F1F7F2]"
               >
                 WhatsApp Us
               </a>
             </div>
 
-            <p className="mt-4 text-xs leading-5 text-gray-500">
+            <p className="mt-4 text-xs leading-5 text-stone-500">
               Looking for bulk gifting? Tell us your quantity, budget and
               delivery requirements to request a quotation.
             </p>
