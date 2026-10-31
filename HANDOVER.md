@@ -16,7 +16,7 @@ The project includes:
 
 | Live Website | https://tribe-green-w8cf.vercel.app/
 | Admin Dashboard |  https://tribe-green-w8cf.vercel.app/admin/login
-| GitHub Repository | 
+| GitHub Repository | https://github.com/ALEKHYAJUJJURI/tribe-green.git
 | Android APK | https://drive.google.com/file/d/1seZaOle1Tg-_UPmojjaGDgzc94IysFku/view?usp=drivesdk
 | Demo Recording | https://drive.google.com/file/d/19p42oqMHh91jNAUztvpaxvc_agbA2yZm/view?usp=drivesdk
 
