@@ -1,5 +1,6 @@
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import HomePage from "./pages/HomePage";
@@ -8,13 +9,20 @@ import ThankYouPage from "./pages/ThankYouPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import EnquiryPage from "./pages/EnquiryPage";
 import ScrollToTop from "./components/layout/ScrollToTop";
+import AdminLoginPage from "./pages/admin/AdminLoginPage";
+import AdminDashboardPage from "./pages/admin/AdminDashboardPage";
 
-function App() {
+function AppLayout() {
+  const location = useLocation();
+
+  const isAdminRoute = location.pathname.startsWith("/admin");
+
   return (
-    <BrowserRouter>
-    <ScrollToTop/>
+    <>
+      <ScrollToTop />
+
       <div className="flex min-h-screen flex-col">
-        <Navbar />
+        {!isAdminRoute && <Navbar />}
 
         <div className="flex-1">
           <Routes>
@@ -22,13 +30,22 @@ function App() {
             <Route path="/products/:slug" element={<ProductDetailsPage />} />
             <Route path="/thank-you" element={<ThankYouPage />} />
             <Route path="/enquiry" element={<EnquiryPage />} />
+            <Route path="/admin/login" element={<AdminLoginPage />} />
+            <Route path="/admin" element={<AdminDashboardPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
-
         </div>
 
-        <Footer />
+        {!isAdminRoute && <Footer />}
       </div>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppLayout />
     </BrowserRouter>
   );
 }

@@ -19,6 +19,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "https://tribe-green-w8cf.vercel.app",
+  "http://localhost:3000"
 ];
 
 app.use(
