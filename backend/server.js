@@ -423,13 +423,15 @@ app.post("/api/admin/login", (req, res) => {
     { expiresIn: "2h" }
   );
 
-  res.cookie("adminToken", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 2 * 60 * 60 * 1000,
-    path: "/",
-  });
+ const adminCookieOptions = {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  maxAge: 2 * 60 * 60 * 1000,
+  path: "/",
+};
+
+res.cookie("adminToken", token, adminCookieOptions);
 
   return res.json({
     success: true,
@@ -440,8 +442,8 @@ app.post("/api/admin/login", (req, res) => {
 app.post("/api/admin/logout", (req, res) => {
   res.clearCookie("adminToken", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    secure: true,
+    sameSite: "none",
     path: "/",
   });
 
